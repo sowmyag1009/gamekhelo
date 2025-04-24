@@ -62,13 +62,13 @@
             transition: background-image 1s ease-in-out;
         }
         #enchanted-library {
-            background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...'); /* Replace with actual base64 of Image1 */
+            background-image: url('image1.jpg');
         }
         #cryptic-study {
-            background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...'); /* Replace with actual base64 of Image2 */
+            background-image: url('image2.jpg');
         }
         #patterned-gallery {
-            background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...'); /* Replace with actual base64 of Image3 */
+            background-image: url('image3.jpg');
         }
     </style>
 </head>
@@ -81,8 +81,8 @@
         <input type="text" id="answer" placeholder="Enter your answer">
         <button onclick="checkAnswer()">Submit</button>
     </div>
-    <audio id="background-audio" loop>
-        <source src="/background.mp3" type="audio/mpeg">
+    <audio id="background-audio" loop autoplay>
+        <source src="background.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
@@ -91,31 +91,31 @@
             {
                 name: "The Enchanted Library",
                 theme: "enchanted-library",
-                image: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...", /* Replace with actual base64 of Image1 */
+                image: "image1.jpg",
                 puzzle: {
                     type: "logic",
-                    description: "In the Enchanted Library, three AI mirrors reflect knowledge: Logic, Memory, and Intuition. Logic always tells the truth, Memory sometimes lies, and Intuition always lies. One mirror says, 'I am Logic.' Can you deduce which mirror is Logic? Enter the mirror's name.",
+                    description: "A mirror says it’s Logic. If Logic is true, Memory lies, and Intuition lies, which mirror is it? Enter the name.",
                     answer: "Logic"
                 }
             },
             {
                 name: "The Cryptic Study",
                 theme: "cryptic-study",
-                image: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...", /* Replace with actual base64 of Image2 */
+                image: "image2.jpg",
                 puzzle: {
                     type: "word",
-                    description: "In the Cryptic Study, an AI mirror presents a riddle: 'I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?' Enter the answer.",
+                    description: "I’m in a mirror’s riddle: I talk but have no mouth. What am I? Enter the answer.",
                     answer: "Echo"
                 }
             },
             {
                 name: "The Patterned Gallery",
                 theme: "patterned-gallery",
-                image: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...", /* Replace with actual base64 of Image3 */
+                image: "image3.jpg",
                 puzzle: {
                     type: "pattern",
-                    description: "In the Patterned Gallery, an AI mirror displays a sequence: 1, 4, 9, 16, 25. What is the next number in this sequence? Enter the number.",
-                    answer: "36"
+                    description: "Mirror shows: 2, 4, 6, 8. What’s next? Enter the number.",
+                    answer: "10"
                 }
             }
         ];
@@ -129,6 +129,15 @@
             document.getElementById('room-image').src = room.image;
             document.getElementById('answer').value = '';
             document.getElementById('background').id = room.theme;
+
+            // Set audio playback speed to 0.5
+            const audio = document.getElementById('background-audio');
+            if (audio) {
+                audio.playbackRate = 0.5;
+                audio.play().catch(error => {
+                    console.log("Audio playback failed:", error);
+                });
+            }
         }
 
         function checkAnswer() {
@@ -146,12 +155,6 @@
                 alert("Incorrect answer. Try again!");
             }
         }
-
-        // Play background audio
-        const audio = document.getElementById('background-audio');
-        audio.play().catch(error => {
-            console.log("Audio playback failed:", error);
-        });
 
         // Load the first room
         loadRoom();
