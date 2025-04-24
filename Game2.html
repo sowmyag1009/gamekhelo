@@ -1,121 +1,167 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Mirror Maze Escape Room</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 600px;
-        }
-        .room {
-            display: none;
-        }
-        .room.active {
-            display: block;
-        }
-        .button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Escape Room: AI Mirror Maze</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #game-container {
+            width: 600px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+        }
+        #room {
+            margin-bottom: 20px;
+        }
+        #puzzle {
+            margin: 20px 0;
+        }
+        #room-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .room-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+        }
+        #enchanted-library {
+            background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...'); /* Replace with actual base64 of Image1 */
+        }
+        #cryptic-study {
+            background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...'); /* Replace with actual base64 of Image2 */
+        }
+        #patterned-gallery {
+            background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...'); /* Replace with actual base64 of Image3 */
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>AI Mirror Maze Escape Room</h1>
-        <audio id="backgroundAudio" src="background.mp3" loop autoplay></audio>
-        
-        <!-- Room 1: Logic Puzzle -->
-        <div id="room1" class="room active">
-            <h2>Room 1: The Enchanted Library</h2>
-            <p>Solve this logic puzzle to proceed:</p>
-            <p id="logicPuzzle"></p>
-            <input type="text" id="logicAnswer" placeholder="Your answer">
-            <button class="button" onclick="checkLogicAnswer()">Submit</button>
-        </div>
+    <div class="room-background" id="background"></div>
+    <div id="game-container">
+        <div id="room"></div>
+        <img id="room-image" src="" alt="Room Image">
+        <div id="puzzle"></div>
+        <input type="text" id="answer" placeholder="Enter your answer">
+        <button onclick="checkAnswer()">Submit</button>
+    </div>
+    <audio id="background-audio" loop>
+        <source src="/background.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
-        <!-- Room 2: Word Game -->
-        <div id="room2" class="room">
-            <h2>Room 2: The Cryptic Study</h2>
-            <p>Solve this word game to proceed:</p>
-            <p id="wordGame"></p>
-            <input type="text" id="wordAnswer" placeholder="Your answer">
-            <button class="button" onclick="checkWordAnswer()">Submit</button>
-        </div>
+    <script>
+        const rooms = [
+            {
+                name: "The Enchanted Library",
+                theme: "enchanted-library",
+                image: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...", /* Replace with actual base64 of Image1 */
+                puzzle: {
+                    type: "logic",
+                    description: "In the Enchanted Library, three AI mirrors reflect knowledge: Logic, Memory, and Intuition. Logic always tells the truth, Memory sometimes lies, and Intuition always lies. One mirror says, 'I am Logic.' Can you deduce which mirror is Logic? Enter the mirror's name.",
+                    answer: "Logic"
+                }
+            },
+            {
+                name: "The Cryptic Study",
+                theme: "cryptic-study",
+                image: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...", /* Replace with actual base64 of Image2 */
+                puzzle: {
+                    type: "word",
+                    description: "In the Cryptic Study, an AI mirror presents a riddle: 'I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?' Enter the answer.",
+                    answer: "Echo"
+                }
+            },
+            {
+                name: "The Patterned Gallery",
+                theme: "patterned-gallery",
+                image: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...", /* Replace with actual base64 of Image3 */
+                puzzle: {
+                    type: "pattern",
+                    description: "In the Patterned Gallery, an AI mirror displays a sequence: 1, 4, 9, 16, 25. What is the next number in this sequence? Enter the number.",
+                    answer: "36"
+                }
+            }
+        ];
 
-        <!-- Room 3: Pattern Recognition -->
-        <div id="room3" class="room">
-            <h2>Room 3: The Patterned Gallery</h2>
-            <p>Solve this pattern recognition puzzle to escape:</p>
-            <p id="patternPuzzle"></p>
-            <input type="text" id="patternAnswer" placeholder="Your answer">
-            <button class="button" onclick="checkPatternAnswer()">Submit</button>
-        </div>
-    </div>
+        let currentRoom = 0;
 
-    <script>
-        const logicPuzzle = "What comes next in the sequence? 2, 4, 8, 16, ?";
-        const wordGame = "Unscramble the letters to form a word: 'AIMRROR'";
-        const patternPuzzle = "Identify the pattern and complete it: A1, B2, C3, D4, ?";
+        function loadRoom() {
+            const room = rooms[currentRoom];
+            document.getElementById('room').innerText = `Room ${currentRoom + 1}: ${room.name}`;
+            document.getElementById('puzzle').innerText = room.puzzle.description;
+            document.getElementById('room-image').src = room.image;
+            document.getElementById('answer').value = '';
+            document.getElementById('background').id = room.theme;
+        }
 
-        document.getElementById('logicPuzzle').innerText = logicPuzzle;
-        document.getElementById('wordGame').innerText = wordGame;
-        document.getElementById('patternPuzzle').innerText = patternPuzzle;
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answer').value.trim();
+            const correctAnswer = rooms[currentRoom].puzzle.answer;
 
-        function checkLogicAnswer() {
-            const answer = document.getElementById('logicAnswer').value.trim();
-            if (answer === "32") {
-                alert("Correct! Moving to the next room.");
-                document.getElementById('room1').classList.remove('active');
-                document.getElementById('room2').classList.add('active');
-            } else {
-                alert("Incorrect. Try again.");
-            }
-        }
+            if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                currentRoom++;
+                if (currentRoom < rooms.length) {
+                    loadRoom();
+                } else {
+                    document.getElementById('game-container').innerHTML = "<h1>Congratulations!</h1><p>You've escaped the AI Mirror Maze!</p>";
+                }
+            } else {
+                alert("Incorrect answer. Try again!");
+            }
+        }
 
-        function checkWordAnswer() {
-            const answer = document.getElementById('wordAnswer').value.trim().toUpperCase();
-            if (answer === "MIRROR") {
-                alert("Correct! Moving to the next room.");
-                document.getElementById('room2').classList.remove('active');
-                document.getElementById('room3').classList.add('active');
-            } else {
-                alert("Incorrect. Try again.");
-            }
-        }
+        // Play background audio
+        const audio = document.getElementById('background-audio');
+        audio.play().catch(error => {
+            console.log("Audio playback failed:", error);
+        });
 
-        function checkPatternAnswer() {
-            const answer = document.getElementById('patternAnswer').value.trim().toUpperCase();
-            if (answer === "E5") {
-                alert("Congratulations! You have escaped the AI Mirror Maze.");
-                // Optionally, you can add code here to reset the game or provide additional options.
-            } else {
-                alert("Incorrect. Try again.");
-            }
-        }
-    </script>
+        // Load the first room
+        loadRoom();
+
+        // Handle Enter key press
+        document.getElementById('answer').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+    </script>
 </body>
 </html>
