@@ -47,22 +47,28 @@
     <div class="container">
         <h1>AI Mirror Maze Escape Room</h1>
         <audio id="backgroundAudio" src="background.mp3" loop autoplay></audio>
+        
+        <!-- Room 1: Logic Puzzle -->
         <div id="room1" class="room active">
-            <h2>Room 1: Logic Puzzle</h2>
+            <h2>Room 1: The Enchanted Library</h2>
             <p>Solve this logic puzzle to proceed:</p>
             <p id="logicPuzzle"></p>
             <input type="text" id="logicAnswer" placeholder="Your answer">
             <button class="button" onclick="checkLogicAnswer()">Submit</button>
         </div>
+
+        <!-- Room 2: Word Game -->
         <div id="room2" class="room">
-            <h2>Room 2: Word Game</h2>
+            <h2>Room 2: The Cryptic Study</h2>
             <p>Solve this word game to proceed:</p>
             <p id="wordGame"></p>
             <input type="text" id="wordAnswer" placeholder="Your answer">
             <button class="button" onclick="checkWordAnswer()">Submit</button>
         </div>
+
+        <!-- Room 3: Pattern Recognition -->
         <div id="room3" class="room">
-            <h2>Room 3: Pattern Recognition</h2>
+            <h2>Room 3: The Patterned Gallery</h2>
             <p>Solve this pattern recognition puzzle to escape:</p>
             <p id="patternPuzzle"></p>
             <input type="text" id="patternAnswer" placeholder="Your answer">
