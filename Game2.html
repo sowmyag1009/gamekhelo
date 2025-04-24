@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Mirror Maze Escape Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+        .room {
+            display: none;
+        }
+        .room.active {
+            display: block;
+        }
+        .button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Mirror Maze Escape Room</h1>
+        <audio id="backgroundAudio" src="background.mp3" loop autoplay></audio>
+        <div id="room1" class="room active">
+            <h2>Room 1: Logic Puzzle</h2>
+            <p>Solve this logic puzzle to proceed:</p>
+            <p id="logicPuzzle"></p>
+            <input type="text" id="logicAnswer" placeholder="Your answer">
+            <button class="button" onclick="checkLogicAnswer()">Submit</button>
+        </div>
+        <div id="room2" class="room">
+            <h2>Room 2: Word Game</h2>
+            <p>Solve this word game to proceed:</p>
+            <p id="wordGame"></p>
+            <input type="text" id="wordAnswer" placeholder="Your answer">
+            <button class="button" onclick="checkWordAnswer()">Submit</button>
+        </div>
+        <div id="room3" class="room">
+            <h2>Room 3: Pattern Recognition</h2>
+            <p>Solve this pattern recognition puzzle to escape:</p>
+            <p id="patternPuzzle"></p>
+            <input type="text" id="patternAnswer" placeholder="Your answer">
+            <button class="button" onclick="checkPatternAnswer()">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        const logicPuzzle = "What comes next in the sequence? 2, 4, 8, 16, ?";
+        const wordGame = "Unscramble the letters to form a word: 'AIMRROR'";
+        const patternPuzzle = "Identify the pattern and complete it: A1, B2, C3, D4, ?";
+
+        document.getElementById('logicPuzzle').innerText = logicPuzzle;
+        document.getElementById('wordGame').innerText = wordGame;
+        document.getElementById('patternPuzzle').innerText = patternPuzzle;
+
+        function checkLogicAnswer() {
+            const answer = document.getElementById('logicAnswer').value.trim();
+            if (answer === "32") {
+                alert("Correct! Moving to the next room.");
+                document.getElementById('room1').classList.remove('active');
+                document.getElementById('room2').classList.add('active');
+            } else {
+                alert("Incorrect. Try again.");
+            }
+        }
+
+        function checkWordAnswer() {
+            const answer = document.getElementById('wordAnswer').value.trim().toUpperCase();
+            if (answer === "MIRROR") {
+                alert("Correct! Moving to the next room.");
+                document.getElementById('room2').classList.remove('active');
+                document.getElementById('room3').classList.add('active');
+            } else {
+                alert("Incorrect. Try again.");
+            }
+        }
+
+        function checkPatternAnswer() {
+            const answer = document.getElementById('patternAnswer').value.trim().toUpperCase();
+            if (answer === "E5") {
+                alert("Congratulations! You have escaped the AI Mirror Maze.");
+                // Optionally, you can add code here to reset the game or provide additional options.
+            } else {
+                alert("Incorrect. Try again.");
+            }
+        }
+    </script>
+</body>
+</html>
